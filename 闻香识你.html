@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>闻香识你 · 香调人格测试</title>
+<meta name="description" content="十道题，测出你的香调人格，并推荐三支真正适合你的香水。">
+<meta property="og:title" content="闻香识你 · 香调人格测试">
+<meta property="og:description" content="十道题，找到与你最像的那一类香气，以及三支适合你的香水。">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#f5f1ea; --ink:#26221e; --muted:#847a6e;
+    --line:#e4dcd1; --accent:#8a6a4b; --card:#fffdf9;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(130% 55% at 50% 0%, var(--tint, #efe7dd) 0%, var(--page-bg, #f5f1ea) 62%)
+      fixed;
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:16px; line-height:1.7;
+    transition:background .6s ease;
+  }
+  .wrap{max-width:520px; margin:0 auto; padding:22px 22px 56px; min-height:100vh; display:flex; flex-direction:column;}
+  .brand{
+    font-size:12px; letter-spacing:.34em; color:var(--muted);
+    text-align:center; padding:6px 0 10px; flex:0 0 auto;
+  }
+  main{flex:1 1 auto;}
+
+  /* ---------- 封面 ---------- */
+  .cover{display:flex; flex-direction:column; align-items:center; text-align:center; padding-top:6vh;}
+  .hero{position:relative; width:100%; display:flex; justify-content:center; margin-bottom:18px;}
+  .hero .glow{
+    position:absolute; top:14%; width:230px; height:230px; border-radius:50%;
+    background:radial-gradient(circle at 50% 45%, rgba(206,166,120,.42), rgba(206,166,120,0) 68%);
+  }
+  .hero svg{position:relative; z-index:1;}
+
+  .cover .eyebrow{font-size:11px; letter-spacing:.4em; color:var(--muted); margin-bottom:12px;}
+  .cover h1{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;
+    font-size:42px; font-weight:600; letter-spacing:.18em; margin:0 0 6px; text-indent:.18em;
+  }
+  .cover .en{
+    font-size:11px; letter-spacing:.5em; color:var(--muted);
+    text-transform:uppercase; margin-bottom:20px; text-indent:.5em;
+  }
+  .cover p{color:var(--muted); font-size:15px; margin:0; max-width:290px; line-height:1.9;}
+  .cover .meta{margin-top:16px; font-size:12px; color:var(--muted); letter-spacing:.06em;}
+  .cover .btn{margin-top:30px;}
+
+  .btn{
+    display:block; width:100%; padding:16px 20px; cursor:pointer;
+    background:var(--ink); color:#fff; border:none; border-radius:999px;
+    font-size:16px; letter-spacing:.1em; font-family:inherit;
+  }
+  .btn:active{opacity:.85;}
+  .btn.ghost{background:transparent; color:var(--ink); border:1px solid var(--line);}
+  .btn.wide{max-width:300px;}
+
+  /* ---------- 答题 ---------- */
+  .progress{height:2px; background:var(--line); border-radius:2px; overflow:hidden;}
+  .progress i{display:block; height:100%; width:0; background:var(--accent); transition:width .45s ease;}
+  .q-head{display:flex; justify-content:space-between; align-items:baseline; margin:20px 0 4px; gap:12px;}
+  .q-index{font-size:11px; letter-spacing:.3em; color:var(--muted); flex:0 0 auto;}
+  .q-hint{
+    font-size:12px; color:var(--muted); text-align:right;
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;
+    letter-spacing:.04em; opacity:.85;
+  }
+  .q-title{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;
+    font-size:22px; font-weight:600; margin:12px 0 4px; line-height:1.6;
+    letter-spacing:.01em;
+  }
+  .q-sub{color:var(--muted); font-size:13px; margin:0 0 24px;}
+  .back{
+    display:inline-block; margin-top:6px; padding:8px 2px; cursor:pointer;
+    background:none; border:none; font-family:inherit; color:var(--muted);
+    font-size:13px; letter-spacing:.06em;
+  }
+  .back:active{opacity:.6;}
+  .opt{
+    display:flex; align-items:flex-start; gap:13px; width:100%; text-align:left; cursor:pointer;
+    padding:15px 16px; margin-bottom:10px;
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    font-family:inherit; color:inherit;
+    transition:border-color .18s ease, transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .opt:hover{border-color:#cbb79f; box-shadow:0 4px 14px rgba(120,96,70,.06);}
+  .opt:active{transform:scale(.99);}
+  .opt.picked{
+    border-color:var(--c,#8a6a4b);
+    background:var(--tint,#f3ede4);
+    box-shadow:0 0 0 2px rgba(138,106,75,.12);
+  }
+  .opt.picked .dot{opacity:.9;}
+  .dot{
+    flex:0 0 auto; width:9px; height:9px; border-radius:50%; margin-top:8px;
+    background:var(--c,#c9b79f); opacity:.42;
+  }
+  .opt b{display:block; font-size:16px; font-weight:600;}
+  .opt small{display:block; color:var(--muted); font-size:13px; margin-top:3px;}
+
+  /* ---------- 结果 ---------- */
+  .result{animation:fade .5s ease;}
+  .hero-card{
+    margin:0 -22px 0; padding:26px 22px 20px; text-align:center; position:relative;
+    background:linear-gradient(180deg, var(--tint,#efe7dd) 0%, rgba(245,241,234,0) 100%);
+  }
+  .hero-card::after{
+    content:""; display:block; height:1.5px; margin:20px auto 0; max-width:220px;
+    background:linear-gradient(90deg, transparent, var(--c,#8a6a4b), transparent);
+    opacity:.45;
+  }
+  .hero-card .kicker{font-size:11px; letter-spacing:.34em; color:var(--muted);}
+  .hero-card .name{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;
+    font-size:36px; font-weight:600; letter-spacing:var(--ls,.1em);
+    margin:8px 0 2px;
+  }
+  .hero-card .tag{color:var(--c,#8a6a4b); font-size:13px; letter-spacing:.16em;}
+
+  /* 一句话：固定两行，避免第二行只有一个字 */
+  .line{
+    font-family:"Songti SC","STSong","Noto Serif SC",serif;
+    font-size:19px; margin:20px auto 0; max-width:340px; line-height:1.85;
+    color:var(--ink2, #3d3730); letter-spacing:.02em;
+  }
+  .line span{display:block; white-space:nowrap;}
+
+  .words{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:16px;}
+  .words span{
+    font-size:12px; padding:3px 12px; border-radius:99px;
+    background:var(--tint,#efe7dd); color:var(--c,#8a6a4b);
+    letter-spacing:.08em;
+  }
+
+  .art{margin:14px 0 0; display:flex; justify-content:center;}
+  .art svg{width:128px; height:128px;}
+
+  .block{margin-top:26px;}
+  .block h3{
+    font-size:11px; letter-spacing:.3em; color:var(--c,#8a6a4b);
+    opacity:.85; font-weight:600; margin:0 0 14px;
+    display:flex; align-items:center; gap:9px;
+  }
+  .block h3::before{
+    content:""; flex:0 0 auto; width:6px; height:6px; border-radius:50%;
+    background:var(--c,#8a6a4b); opacity:.7;
+  }
+  .block h3::after{content:""; flex:1; height:1px; background:var(--c,#e4dcd1); opacity:.2;}
+  .block p{margin:0; font-size:15px; line-height:1.9; color:var(--ink2,#3d3730);}
+  .block p + p{margin-top:10px;}
+  .block p.basis{
+    font-size:12.5px; color:var(--muted); line-height:1.95;
+    padding-left:12px; border-left:2px solid var(--c,#e4dcd1);
+    opacity:.95; letter-spacing:.01em;
+  }
+
+  .bars{display:flex; flex-direction:column; gap:12px;}
+  .bar-row{display:flex; align-items:center; gap:12px;}
+  .bar-row em{
+    font-style:normal; font-size:11px; color:var(--muted); letter-spacing:.14em;
+    flex:0 0 34px;
+  }
+  .bar-track{flex:1; height:8px; background:#ece5db; border-radius:99px; overflow:hidden;}
+  .bar-track i{
+    display:block; height:100%; border-radius:99px; width:0;
+    transition:width .85s cubic-bezier(.22,.8,.3,1);
+  }
+  .bar-desc{font-size:13px; color:var(--muted); margin:4px 0 0 46px;}
+
+  .comp .bar-row em{flex:0 0 52px; font-size:12px; letter-spacing:.06em;}
+  .comp .bar-track{height:7px;}
+
+  .duo{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .mini{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--r,14px);
+    padding:14px 14px; font-size:13px; line-height:1.75;
+    color:var(--ink2,#3d3730);
+  }
+  .mini b{display:block; font-size:11px; letter-spacing:.2em; color:var(--c,#8a6a4b); opacity:.85; margin-bottom:6px; font-weight:600;}
+  .duo .mini:nth-child(1){background:var(--tint,#efe7dd); border-color:transparent;}
+  /* 「建议避开」用虚线框区分，避免和下方推荐卡撞脸 */
+  .duo .mini:nth-child(2){
+    background:transparent;
+    border:1px dashed #d3c3ad;
+    color:var(--muted);
+  }
+  .duo .mini:nth-child(2) b{color:var(--muted); opacity:.8;}
+
+  .picks{display:flex; flex-direction:column; gap:9px;}
+  .pick{
+    position:relative; display:flex; align-items:flex-start; gap:13px;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:var(--r,14px);
+    padding:13px 15px 13px 18px; overflow:hidden;
+  }
+  .pick::before{
+    content:""; position:absolute; left:0; top:13px; bottom:13px; width:4px;
+    border-radius:0 4px 4px 0; background:var(--c,#8a6a4b); opacity:.55;
+  }
+  .pick .no{
+    flex:0 0 26px; height:26px; border-radius:50%; margin-top:2px;
+    background:var(--tint,#efe7dd); color:var(--c,#8a6a4b);
+    font-size:12px; display:flex; align-items:center; justify-content:center;
+  }
+  .pick-body{flex:1; min-width:0;}
+  .pick b{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    font-size:15.5px; font-weight:600;
+  }
+  .tier{
+    font-size:10px; font-weight:500; letter-spacing:.08em;
+    padding:1px 8px; border-radius:99px;
+    background:var(--tint,#efe7dd); color:var(--c,#8a6a4b);
+  }
+  .pick small{
+    display:block; color:var(--muted); font-size:11.5px; margin-top:3px;
+    letter-spacing:.02em;
+  }
+  .pick em{
+    display:block; font-style:normal; font-size:12.5px;
+    color:var(--ink2,#5f574d); opacity:.9; margin-top:8px; line-height:1.7;
+  }
+
+  .share-tip{
+    margin-top:26px; padding:15px 18px;
+    background:var(--tint,#efe7dd);
+    border:1px dashed #d6c4ad; border-radius:var(--r,14px);
+    color:#6b6156; font-size:12.5px; line-height:1.8; text-align:center;
+  }
+  .source-note{
+    margin-top:12px; text-align:center;
+    font-size:11.5px; color:var(--muted); letter-spacing:.04em;
+  }
+  .foot{
+    margin-top:30px; text-align:center; font-size:11px;
+    color:var(--muted); letter-spacing:.08em; flex:0 0 auto;
+  }
+
+  /* ---------- 分享图弹层 ---------- */
+  .share-overlay{
+    position:fixed; inset:0; z-index:99;
+    background:rgba(22,19,16,.92);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:14px; padding:22px;
+    animation:fade .25s ease;
+  }
+  .share-overlay img{
+    max-width:92vw; max-height:74vh; border-radius:14px;
+    box-shadow:0 24px 70px rgba(0,0,0,.55);
+  }
+  .share-overlay p{
+    color:#e6ded2; font-size:13px; letter-spacing:.12em; margin:0;
+  }
+  .share-overlay .close{
+    margin-top:4px; padding:10px 26px; border-radius:99px; cursor:pointer;
+    background:transparent; color:#cfc6b8; border:1px solid rgba(255,255,255,.22);
+    font-size:13px; font-family:inherit;
+  }
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+
+  /* ---------- 音乐开关 ---------- */
+  .music-toggle{position:fixed;top:14px;right:14px;z-index:40;border:1px solid var(--c,#8a6a4b);
+    background:rgba(255,255,255,.82);color:var(--c,#8a6a4b);font-size:12px;padding:6px 13px;
+    border-radius:999px;cursor:pointer;font-family:inherit;backdrop-filter:blur(4px);
+    transition:opacity .2s,color .2s,border-color .2s}
+  .music-toggle.off{opacity:.55;color:#8a8075;border-color:#cfc6ba}
+  .music-credit{font-size:11px;color:#a99f92;margin-top:18px;letter-spacing:.04em;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">闻 香 识 你</div>
+  <main id="screen"></main>
+  <div class="foot">香调数据来源 · Scento Perfume Database</div>
+</div>
+
+<script>
+/* =========================================================
+   题库：32 题，每次抽 10 道（分布均衡），选项顺序打乱
+   ========================================================= */
+const QUESTIONS = [
+  /* ---------- 轮 1 · 日常 ---------- */
+  { q:"早上闹钟响了，你通常会：", sub:"选最接近你真实反应的那个", options:[
+    { t:"立刻起来，今天有要做的事", d:"躺着反而更累", k:"citrus" },
+    { t:"再躺五分钟，顺序不能乱", d:"刷牙、喝水、出门，一步不能少", k:"musk" },
+    { t:"关掉再睡，睡饱最重要", d:"醒了才算真的开始", k:"sweet" },
+    { t:"先看看窗外天气怎么样", d:"决定今天怎么过", k:"green" } ]},
+
+  { q:"周末睡到自然醒，你第一件事：", sub:"没有安排的那种周末", options:[
+    { t:"翻手机，看看有没有人约", d:"有人一起更好玩", k:"fruity" },
+    { t:"拉开窗帘，让光进来", d:"房间亮了人就醒了", k:"green" },
+    { t:"想想今天吃什么", d:"胃先醒", k:"sweet" },
+    { t:"什么都不做，先发会儿呆", d:"让脑子慢慢开机", k:"mystery" } ]},
+
+  { q:"你更喜欢哪种早晨？", sub:"凭画面感选", options:[
+    { t:"阳光很足，适合出门", d:"一天有很多可能", k:"citrus" },
+    { t:"有雾，安静，人很少", d:"世界还没开始吵", k:"woody" },
+    { t:"刚下过雨，空气很新", d:"像被洗过一遍", k:"green" },
+    { t:"厨房有热的东西在煮", d:"有人在就是安心", k:"sweet" } ]},
+
+  { q:"早餐你更想吃：", sub:"不用考虑热量", options:[
+    { t:"一杯热牛奶配面包", d:"简单、稳、不折腾", k:"musk" },
+    { t:"水果酸奶加坚果", d:"清爽，吃完不困", k:"fruity" },
+    { t:"豆浆油条，热的", d:"从小吃到大", k:"floral" },
+    { t:"随便，看当时心情", d:"没想好就出门了", k:"mystery" } ]},
+
+  { q:"出门前照镜子，你主要在确认：", sub:"诚实一点", options:[
+    { t:"精神不精神", d:"气色好不好", k:"citrus" },
+    { t:"衣服搭不搭", d:"出门要有样子", k:"fruity" },
+    { t:"有没有哪里不对", d:"细节不能出错", k:"woody" },
+    { t:"身上味道淡不淡", d:"干净最重要", k:"musk" } ]},
+
+  { q:"包里一定会带的一样东西：", sub:"只能选一样", options:[
+    { t:"纸巾", d:"总有用上的时候", k:"floral" },
+    { t:"水杯", d:"不喝水会难受", k:"green" },
+    { t:"耳机", d:"没有它路上很难熬", k:"mystery" },
+    { t:"钥匙", d:"少了回不了家", k:"musk" } ]},
+
+  { q:"路上遇到不太熟的同学，你会：", sub:"第一反应", options:[
+    { t:"主动打招呼，聊两句", d:"不打招呼反而尴尬", k:"citrus" },
+    { t:"点个头就过去", d:"礼貌但不勉强", k:"musk" },
+    { t:"看对方有没有先看到我", d:"有点犹豫", k:"mystery" },
+    { t:"笑着挥挥手，声音大一点", d:"热闹一点没关系", k:"fruity" } ]},
+
+  { q:"到教室发现来早了十分钟：", sub:"一个人，没人找你", options:[
+    { t:"找个靠窗的位置坐下", d:"正好晒会儿太阳", k:"floral" },
+    { t:"戴上耳机听点东西", d:"十分钟刚好", k:"woody" },
+    { t:"把昨天的笔记翻一翻", d:"心里踏实", k:"green" },
+    { t:"趴一会儿，补个觉", d:"能睡就睡", k:"sweet" } ]},
+
+  /* ---------- 轮 2 · 关系 ---------- */
+  { q:"朋友心情不好，你第一反应：", sub:"不用想标准答案", options:[
+    { t:"先问清楚发生了什么", d:"把事弄明白才好帮", k:"citrus" },
+    { t:"先陪着，不急着说话", d:"在旁边就够了", k:"floral" },
+    { t:"带他出去吃点好的", d:"换个地方心情会变", k:"woody" },
+    { t:"把自己的糗事讲给他听", d:"让他笑一下", k:"musk" } ]},
+
+  { q:"聚会里你更像：", sub:"想象一个你熟悉的局", options:[
+    { t:"到处串场聊天的人", d:"跟谁都能聊两句", k:"fruity" },
+    { t:"默默帮大家收拾的人", d:"看不得桌子乱", k:"green" },
+    { t:"负责点菜和分吃的", d:"怕有人没吃好", k:"sweet" },
+    { t:"坐在边上观察的人", d:"其实什么都看到了", k:"mystery" } ]},
+
+  { q:"你更愿意和哪种人做朋友？", sub:"选更吸引你的", options:[
+    { t:"想法很多，不停往外冒", d:"跟他待着不无聊", k:"citrus" },
+    { t:"话不多，但说一句算一句", d:"靠得住", k:"woody" },
+    { t:"很会照顾人，细心", d:"跟他在一起不用操心", k:"green" },
+    { t:"有点特别，不太一样", d:"想多了解一点", k:"sweet" } ]},
+
+  { q:"别人夸你，你更想听到：", sub:"哪一句会让你真的开心", options:[
+    { t:"你很温柔，跟你相处很舒服", d:"被看见的是性格", k:"floral" },
+    { t:"你很有意思，跟你一起很好玩", d:"被认同的是活力", k:"fruity" },
+    { t:"你很有自己的想法", d:"被理解的是内在", k:"mystery" },
+    { t:"你很靠谱，交给你放心", d:"被信任的是能力", k:"musk" } ]},
+
+  { q:"收到不喜欢的礼物，你会：", sub:"真实反应", options:[
+    { t:"当面好好谢谢，收起来", d:"心意最重要", k:"citrus" },
+    { t:"用起来，至少让它有用", d:"别浪费", k:"green" },
+    { t:"放在看得见的地方", d:"对方来会看到", k:"woody" },
+    { t:"过两天悄悄收进柜子", d:"舍不得扔也放不下", k:"sweet" } ]},
+
+  { q:"和陌生人吃饭，你：", sub:"第一顿饭", options:[
+    { t:"先找话题，别冷场", d:"聊天才不尴尬", k:"floral" },
+    { t:"等对方先开口", d:"不想太主动", k:"green" },
+    { t:"观察一圈再说话", d:"先看是什么人", k:"musk" },
+    { t:"该说说该吃吃，不勉强", d:"自然就好", k:"mystery" } ]},
+
+  { q:"有人跟你意见不同，你：", sub:"不是辩论，是日常聊天", options:[
+    { t:"直接说自己的想法", d:"不藏着", k:"citrus" },
+    { t:"听完再说，不急着反驳", d:"先弄清楚", k:"mystery" },
+    { t:"笑一笑，换个话题", d:"没必要争", k:"fruity" },
+    { t:"回去自己再想想", d:"有些话要消化", k:"musk" } ]},
+
+  { q:"你最怕哪种场合？", sub:"想到就想推掉的那种", options:[
+    { t:"很多人，要一直说话", d:"说一天会累", k:"floral" },
+    { t:"冷场，没人接话", d:"空气会僵住", k:"woody" },
+    { t:"要当众表态", d:"被看着不自在", k:"sweet" },
+    { t:"太吵太乱，停不下来", d:"脑子会炸", k:"green" } ]},
+
+  /* ---------- 轮 3 · 情绪 ---------- */
+  { q:"压力大的时候，你会：", sub:"最近一次是怎么熬过来的", options:[
+    { t:"列个清单，一件件做", d:"做起来就不慌了", k:"citrus" },
+    { t:"先把房间收拾干净", d:"环境整齐心才静", k:"musk" },
+    { t:"找个没人的地方待着", d:"需要空间", k:"woody" },
+    { t:"吃点甜的，缓一缓", d:"先让身体舒服", k:"sweet" } ]},
+
+  { q:"难过的时候，你最想：", sub:"不是应该，是想要", options:[
+    { t:"出门走很久", d:"走累了就不想了", k:"fruity" },
+    { t:"把窗户打开透透气", d:"空气流动会好一点", k:"green" },
+    { t:"被人抱一下", d:"不用说话", k:"sweet" },
+    { t:"一个人安静地待着", d:"不想被问", k:"mystery" } ]},
+
+  { q:"生气的时候你更像：", sub:"真实一点", options:[
+    { t:"当场就说出来", d:"憋着更难受", k:"citrus" },
+    { t:"不说话，脸很冷", d:"对方会知道", k:"woody" },
+    { t:"先冷静，再处理", d:"不想说错话", k:"green" },
+    { t:"需要很久才消", d:"表面过去了，心里还在", k:"sweet" } ]},
+
+  { q:"焦虑的时候，什么最能让你好一点？", sub:"试过的", options:[
+    { t:"把要做的事写下来", d:"看见了就没那么可怕", k:"floral" },
+    { t:"找人聊聊", d:"说出来会轻一点", k:"fruity" },
+    { t:"做点重复的事", d:"洗衣服、整理、走路", k:"mystery" },
+    { t:"什么都不做，等它过去", d:"急也没用", k:"musk" } ]},
+
+  { q:"被误解了，你会：", sub:"最后一次", options:[
+    { t:"马上解释清楚", d:"不想被误会", k:"citrus" },
+    { t:"解释一次，听不听随他", d:"尽力就行", k:"sweet" },
+    { t:"不解释，时间会说明", d:"懂的人自然懂", k:"woody" },
+    { t:"心里不舒服，但照常", d:"不想把事闹大", k:"fruity" } ]},
+
+  { q:"一个人待着的时候，你在：", sub:"不是孤独，是独处", options:[
+    { t:"整理东西，收拾房间", d:"手上有事心里就安", k:"floral" },
+    { t:"看窗外，发呆", d:"脑子放空", k:"green" },
+    { t:"想一些很远的事", d:"未来、以前、如果", k:"musk" },
+    { t:"听歌，什么都不干", d:"让声音填满", k:"mystery" } ]},
+
+  { q:"失败了一次，你：", sub:"不需要正确答案", options:[
+    { t:"分析哪里出了问题", d:"下次不再犯", k:"citrus" },
+    { t:"先难过一会儿", d:"情绪要出来", k:"fruity" },
+    { t:"假装没事，继续过", d:"不想被看出来", k:"mystery" },
+    { t:"慢慢来，总会好的", d:"急不来", k:"musk" } ]},
+
+  { q:"开心的时候，你最想：", sub:"上一次很开心是什么时候", options:[
+    { t:"跟人分享，说出来", d:"快乐要分给别人", k:"floral" },
+    { t:"自己记下来", d:"留着以后看", k:"woody" },
+    { t:"吃点好的庆祝", d:"要有仪式感", k:"sweet" },
+    { t:"出去走走，看看天", d:"让这一天完整", k:"green" } ]},
+
+  /* ---------- 轮 4 · 审美 ---------- */
+  { q:"你更喜欢哪种颜色？", sub:"第一眼舒服的", options:[
+    { t:"暖橙、柠檬黄", d:"亮的，有精神", k:"citrus" },
+    { t:"浅粉、玫瑰", d:"软的，靠近一点", k:"floral" },
+    { t:"深棕、墨绿", d:"沉的，有分量", k:"woody" },
+    { t:"米白、灰", d:"干净的，不刺眼", k:"musk" } ]},
+
+  { q:"房间里的摆件，你会选：", sub:"只能放一个", options:[
+    { t:"一个小风扇或旧玩具", d:"会动，有意思", k:"fruity" },
+    { t:"一盆绿植", d:"看着长就好", k:"green" },
+    { t:"一个香薰蜡烛", d:"有味道才有氛围", k:"sweet" },
+    { t:"一个看不懂的雕塑", d:"说不上为什么喜欢", k:"mystery" } ]},
+
+  { q:"一件衣服，你最先看：", sub:"在店里拿起它的理由", options:[
+    { t:"颜色亮不亮", d:"穿上有没有精神", k:"citrus" },
+    { t:"料子摸起来怎么样", d:"不舒服不会买", k:"woody" },
+    { t:"好不好搭", d:"能不能常穿", k:"green" },
+    { t:"穿上有没有安全感", d:"想不想一直穿它", k:"sweet" } ]},
+
+  { q:"你更喜欢的材质：", sub:"摸一下的感觉", options:[
+    { t:"棉麻，有点粗糙", d:"透气、踏实", k:"floral" },
+    { t:"光滑的丝或缎", d:"凉凉的，很顺", k:"fruity" },
+    { t:"哑光的旧木头", d:"有一点年头", k:"mystery" },
+    { t:"厚实的针织", d:"暖，有包裹感", k:"musk" } ]},
+
+  { q:"买杯子，你会挑：", sub:"每天要用的东西", options:[
+    { t:"简单的白瓷杯", d:"什么都能装", k:"citrus" },
+    { t:"带一点花纹的", d:"看着心情好", k:"sweet" },
+    { t:"厚重的陶杯", d:"握在手里很稳", k:"woody" },
+    { t:"颜色特别的", d:"一眼就想要", k:"fruity" } ]},
+
+  { q:"手机壳你更喜欢：", sub:"现在这个也算", options:[
+    { t:"透明的，露出原色", d:"简单干净", k:"floral" },
+    { t:"有图案、有点花的", d:"看着不无聊", k:"green" },
+    { t:"纯黑或深色", d:"耐脏，不显眼", k:"musk" },
+    { t:"小众设计的", d:"不想跟别人一样", k:"mystery" } ]},
+
+  { q:"你更喜欢的字体感觉：", sub:"说不上专业，凭感觉", options:[
+    { t:"粗、直、有力量", d:"看着有精神", k:"citrus" },
+    { t:"圆润、手写感", d:"温柔一点", k:"mystery" },
+    { t:"细、干净、留白多", d:"看着清爽", k:"fruity" },
+    { t:"老式、衬线、像书", d:"有旧旧的味道", k:"musk" } ]},
+
+  { q:"一张照片，你更在意：", sub:"自己会拍的那种", options:[
+    { t:"光好不好", d:"光是照片的魂", k:"floral" },
+    { t:"有没有故事", d:"看久了能想起什么", k:"woody" },
+    { t:"颜色舒不舒服", d:"看着要顺眼", k:"sweet" },
+    { t:"构图干不干净", d:"乱的不喜欢", k:"green" } ]},
+
+  /* ---------- 轮 5 · 空间 ---------- */
+  { q:"理想的房间朝向：", sub:"不用考虑实际", options:[
+    { t:"朝东，早上有太阳", d:"一天从亮开始", k:"citrus" },
+    { t:"朝北，光线很柔", d:"不刺眼，适合待着", k:"floral" },
+    { t:"朝南，一整天都暖", d:"晒得到太阳", k:"woody" },
+    { t:"朝西，傍晚最好看", d:"落日的那一会儿", k:"musk" } ]},
+
+  { q:"你更喜欢哪种灯光？", sub:"晚上在家", options:[
+    { t:"很亮，什么都看得清", d:"不喜欢暗", k:"fruity" },
+    { t:"暖黄的小灯", d:"刚好照亮一小块", k:"green" },
+    { t:"只开一盏，其他都关掉", d:"有边界", k:"sweet" },
+    { t:"蜡烛或氛围灯", d:"看不清也没关系", k:"mystery" } ]},
+
+  { q:"下雨天你会：", sub:"突然下雨的那种下午", options:[
+    { t:"反而想出去走走", d:"雨里的街道很好看", k:"citrus" },
+    { t:"把窗开一条缝", d:"听雨声，闻土味", k:"woody" },
+    { t:"煮点热的，窝着", d:"最适合待在家", k:"green" },
+    { t:"什么都不做，看雨", d:"发呆也是享受", k:"sweet" } ]},
+
+  { q:"你更想住在：", sub:"不考虑通勤", options:[
+    { t:"热闹的街边", d:"楼下什么都有", k:"floral" },
+    { t:"安静的顶楼", d:"离天空近一点", k:"fruity" },
+    { t:"有院子的一楼", d:"能种点东西", k:"mystery" },
+    { t:"老城区的小房子", d:"有生活痕迹", k:"musk" } ]},
+
+  { q:"夏天的下午，你：", sub:"最热的那几个小时", options:[
+    { t:"出去，不想浪费白天", d:"晒一点没关系", k:"citrus" },
+    { t:"找个有空调的地方待着", d:"凉快最重要", k:"sweet" },
+    { t:"喝点冰的，慢慢过", d:"不急", k:"woody" },
+    { t:"洗个澡，清爽一下", d:"整个人会重启", k:"fruity" } ]},
+
+  { q:"冬天你更喜欢：", sub:"凭感觉", options:[
+    { t:"下雪，世界很安静", d:"白茫茫的", k:"floral" },
+    { t:"出太阳但不冷", d:"晒着很舒服", k:"green" },
+    { t:"很冷，躲进屋里", d:"室内暖就够了", k:"musk" },
+    { t:"阴天，风很大", d:"裹紧外套走路", k:"mystery" } ]},
+
+  { q:"一个陌生的城市，你先去：", sub:"刚下火车", options:[
+    { t:"找个高处看看全景", d:"先知道自己在哪", k:"citrus" },
+    { t:"走街串巷，随便逛", d:"不按攻略", k:"mystery" },
+    { t:"找一家本地小馆吃饭", d:"先安顿胃", k:"fruity" },
+    { t:"去公园或河边坐着", d:"看本地人怎么生活", k:"musk" } ]},
+
+  { q:"你更喜欢哪种声音？", sub:"戴上耳机想象", options:[
+    { t:"风吹树叶的沙沙声", d:"很轻，很自然", k:"floral" },
+    { t:"远处的人声", d:"不吵，但有生活", k:"woody" },
+    { t:"锅碗瓢盆的声音", d:"有人在做饭", k:"sweet" },
+    { t:"很安静，几乎没声音", d:"安静本身就好", k:"green" } ]},
+
+  /* ---------- 轮 6 · 感官 ---------- */
+  { q:"闭上眼睛，哪种触感最舒服？", sub:"凭身体记忆", options:[
+    { t:"晒过太阳的被子", d:"暖、干、有余温", k:"citrus" },
+    { t:"很软很软的枕头", d:"陷进去", k:"floral" },
+    { t:"粗糙的旧木头", d:"有纹理", k:"woody" },
+    { t:"刚洗过的手", d:"干净、凉", k:"musk" } ]},
+
+  { q:"你更喜欢哪种味道？", sub:"不用懂香水", options:[
+    { t:"刚剥开的橘子", d:"酸、亮、醒神", k:"fruity" },
+    { t:"雨后的青草", d:"湿的、绿的", k:"green" },
+    { t:"刚烤好的面包", d:"暖、甜、安心", k:"sweet" },
+    { t:"旧书页的味道", d:"有一点灰", k:"mystery" } ]},
+
+  { q:"你更喜欢的温度：", sub:"身体的感觉", options:[
+    { t:"微微出汗的暖", d:"动起来的那种", k:"citrus" },
+    { t:"凉爽的风", d:"刚好吹过来", k:"woody" },
+    { t:"被窝里的热", d:"不想出来", k:"green" },
+    { t:"洗完澡的温", d:"刚好擦干", k:"sweet" } ]},
+
+  { q:"你更喜欢的质地：", sub:"看着就舒服", options:[
+    { t:"平整、干净、没有褶皱", d:"一切都对", k:"floral" },
+    { t:"有点旧、有点软", d:"用久了的样子", k:"fruity" },
+    { t:"哑光、不反光", d:"安静", k:"mystery" },
+    { t:"厚、实、有重量", d:"拿得稳", k:"musk" } ]},
+
+  { q:"你更喜欢哪种光线？", sub:"一天里最舒服的那段", options:[
+    { t:"正午的太阳", d:"什么都看得清", k:"citrus" },
+    { t:"傍晚的金色", d:"一切都变好看", k:"sweet" },
+    { t:"阴天的散射光", d:"不刺眼", k:"woody" },
+    { t:"天刚亮的那点光", d:"世界还没醒", k:"fruity" } ]},
+
+  { q:"你更容易被哪种气味打动？", sub:"路过会停一下的那种", options:[
+    { t:"花香，淡淡的", d:"像有人在附近", k:"floral" },
+    { t:"皂香，干净的", d:"像刚洗完澡", k:"green" },
+    { t:"很沉的木或香料", d:"说不清，但会回头", k:"mystery" },
+    { t:"甜食的香味", d:"闻着就开心", k:"musk" } ]},
+
+  { q:"你更喜欢哪种节奏？", sub:"说生活节奏", options:[
+    { t:"快一点，事情做起来", d:"停下来反而空", k:"citrus" },
+    { t:"慢一点，留点空", d:"太满会累", k:"mystery" },
+    { t:"有规律，每天差不多", d:"知道下一步", k:"woody" },
+    { t:"跟着心情来", d:"不想被安排", k:"fruity" } ]},
+
+  { q:"你更喜欢的重量感：", sub:"拿在手里的东西", options:[
+    { t:"轻的，随手就能拿", d:"不费劲", k:"floral" },
+    { t:"重的，有存在感", d:"拿得稳", k:"woody" },
+    { t:"刚好，不轻不重", d:"用着舒服", k:"sweet" },
+    { t:"越简单越好", d:"别多带", k:"green" } ]},
+
+  /* ---------- 轮 7 · 选择 ---------- */
+  { q:"如果只能保留一个习惯：", sub:"其他的都要放弃", options:[
+    { t:"每天出门走走", d:"保持行动", k:"citrus" },
+    { t:"每天整理一次房间", d:"保持秩序", k:"musk" },
+    { t:"每天留一点独处时间", d:"保持自己", k:"woody" },
+    { t:"每天好好吃一顿", d:"保持照顾自己", k:"sweet" } ]},
+
+  { q:"你更愿意把时间花在：", sub:"抛开作业", options:[
+    { t:"跟朋友在一起", d:"人是需要人的", k:"fruity" },
+    { t:"做一件具体的事", d:"有结果就安心", k:"green" },
+    { t:"学一个新东西", d:"有用没用都行", k:"mystery" },
+    { t:"什么都不做", d:"恢复也是正事", k:"musk" } ]},
+
+  { q:"做决定时你更信：", sub:"小事也算", options:[
+    { t:"第一感觉", d:"想多了反而错", k:"citrus" },
+    { t:"之前类似的经验", d:"有依据", k:"woody" },
+    { t:"问一下别人", d:"多一个角度", k:"green" },
+    { t:"再等等，看会不会变", d:"不急着定", k:"sweet" } ]},
+
+  { q:"你更看重朋友的：", sub:"选一个", options:[
+    { t:"真诚", d:"不装就好", k:"floral" },
+    { t:"有趣", d:"在一起开心", k:"fruity" },
+    { t:"有自己的世界", d:"不用一直黏着", k:"mystery" },
+    { t:"靠得住", d:"关键时候在", k:"musk" } ]},
+
+  { q:"你更想成为哪种人？", sub:"诚实一点", options:[
+    { t:"走到哪里都能照亮一点", d:"有能量", k:"citrus" },
+    { t:"让人想起来会安心", d:"有温度", k:"sweet" },
+    { t:"有自己的节奏和边界", d:"不被打扰", k:"woody" },
+    { t:"做事干净，不拖泥带水", d:"有分寸", k:"fruity" } ]},
+
+  { q:"你更受不了自己：", sub:"自己的毛病", options:[
+    { t:"想太多，迟迟不开始", d:"内耗", k:"floral" },
+    { t:"太在意别人怎么看", d:"不自由", k:"green" },
+    { t:"三分钟热度", d:"坚持不下来", k:"mystery" },
+    { t:"太闷，什么都不说", d:"别人走不进", k:"musk" } ]},
+
+  { q:"你更愿意被记住：", sub:"很久以后", options:[
+    { t:"跟你在一起的时候很开心", d:"轻松的回忆", k:"citrus" },
+    { t:"你这个人很特别", d:"说不上哪里", k:"mystery" },
+    { t:"你帮过我", d:"具体的某一件事", k:"fruity" },
+    { t:"你很稳，一直在", d:"不用想起也在", k:"musk" } ]},
+
+  { q:"你更想被谁需要？", sub:"只能选一个", options:[
+    { t:"家人", d:"最亲的人", k:"floral" },
+    { t:"朋友", d:"一起长大的人", k:"woody" },
+    { t:"工作上的伙伴", d:"被认可", k:"sweet" },
+    { t:"不特定的人", d:"能帮到就好", k:"green" } ]},
+
+  /* ---------- 轮 8 · 想象 ---------- */
+  { q:"如果有一整天完全自由：", sub:"没有课、没有事", options:[
+    { t:"出门，去没去过的地方", d:"待着会浪费", k:"citrus" },
+    { t:"把想看的都看了", d:"攒了很久的清单", k:"floral" },
+    { t:"一个人慢慢过", d:"不跟任何人报备", k:"woody" },
+    { t:"睡到自然醒，然后发呆", d:"休息也是安排", k:"musk" } ]},
+
+  { q:"如果中了一笔小奖：", sub:"不多不少", options:[
+    { t:"立刻出去玩一趟", d:"先花了再说", k:"fruity" },
+    { t:"买一件一直想要的东西", d:"用得上", k:"green" },
+    { t:"请朋友吃一顿", d:"一起开心", k:"sweet" },
+    { t:"先存着，以后再说", d:"不急着花", k:"mystery" } ]},
+
+  { q:"如果可以选一种超能力：", sub:"只能选一个", options:[
+    { t:"瞬间移动", d:"随时随地离开", k:"citrus" },
+    { t:"让时间变慢", d:"想多待一会儿", k:"woody" },
+    { t:"听懂所有语言", d:"想去更远的地方", k:"green" },
+    { t:"让东西变得好吃", d:"生活立刻变好", k:"sweet" } ]},
+
+  { q:"如果开一家小店，你开：", sub:"不考虑赚不赚钱", options:[
+    { t:"花店", d:"每天有花就好", k:"floral" },
+    { t:"书店", d:"安静，能待着", k:"fruity" },
+    { t:"咖啡馆", d:"看人来人往", k:"mystery" },
+    { t:"早餐店", d:"热乎，实在", k:"musk" } ]},
+
+  { q:"如果能回到某一天：", sub:"只能回去一天", options:[
+    { t:"一个特别开心的日子", d:"再感受一次", k:"citrus" },
+    { t:"一个没做好的日子", d:"想重来一次", k:"sweet" },
+    { t:"一个普通但安静的日子", d:"那时候还不知道珍惜", k:"woody" },
+    { t:"一个还没开始的日子", d:"重新选一次", k:"fruity" } ]},
+
+  { q:"如果去荒岛只能带三样：", sub:"认真想一下", options:[
+    { t:"打火机、刀、水壶", d:"先活下来", k:"floral" },
+    { t:"帐篷、毯子、枕头", d:"要睡得着", k:"green" },
+    { t:"书、纸、笔", d:"一个人也能过", k:"mystery" },
+    { t:"零食、音乐、照片", d:"舒服最重要", k:"musk" } ]},
+
+  { q:"如果给十年后的自己留一句话：", sub:"只能一句", options:[
+    { t:"别停下来", d:"继续往前", k:"citrus" },
+    { t:"记得休息", d:"别太拼", k:"mystery" },
+    { t:"你还是你吗", d:"别丢了自己", k:"fruity" },
+    { t:"谢谢你还在", d:"能坚持就很好", k:"musk" } ]},
+
+  { q:"如果现在可以立刻出发：", sub:"不用考虑现实", options:[
+    { t:"去海边，看一次日出", d:"光从海面升起来", k:"floral" },
+    { t:"去山里，住几天", d:"没有信号也行", k:"woody" },
+    { t:"去一个熟悉的老地方", d:"回去看看", k:"sweet" },
+    { t:"随便买一张票就走", d:"去哪都行", k:"green" } ]},
+];
+
+/* =========================================================
+   8 个香调人格：基础文案 / 配色 / 插画
+   ========================================================= */
+const RESULTS = {
+  citrus: {
+    name:"阳光派", tag:"柑橘调 · 明亮",
+    line:["你一进门","房间就亮了一点"],
+    words:["直接","明亮","有活力","好相处"],
+    desc:"你是那种不用刻意活跃气氛的人。对人热情但不黏人，遇到麻烦先想办法，而不是先抱怨。兴趣很多，也愿意一个个去试。",
+    notes:[["前调","刚剥开的橘子皮，酸得干净"],["中调","橙花和一点茶，明亮但不刺"],["后调","淡淡的木质和苔藓，收得利落"]],
+    scene:"上课、通勤、夏天出门、运动之后",
+    avoid:"浓甜的花果香和厚重的树脂调，会盖住你本身的清爽",
+    c:"#c9843a", tint:"#f7ead8", bg:"#fbf5e9", r:"16px", ls:".12em", ink2:"#6f4a1e"
+  },
+  floral: {
+    name:"温柔派", tag:"花香调 · 柔软",
+    line:["跟你待着的人","会不自觉地放松"],
+    words:["温柔","会照顾人","柔和","有耐心"],
+    desc:"你不擅长争，但很会照顾人。别人把事情交给你会放心，因为你答应的事情不会忘。你习惯先照顾别人的感受，也值得被人好好照顾。",
+    notes:[["前调","白花和一点柑橘，柔软但有精神"],["中调","茉莉、晚香玉，温柔却不寡淡"],["后调","麝香和香草，像洗完澡的皮肤"]],
+    scene:"约会、见长辈、日常上课",
+    avoid:"过于清苦的木质和烟熏调，会显得你不好接近",
+    c:"#bd7f92", tint:"#f8e9ed", bg:"#fdf3f6", r:"24px", ls:".18em", ink2:"#7a4a58"
+  },
+  fruity: {
+    name:"元气派", tag:"果香调 · 鲜活",
+    line:["你的快乐来得很直接","也很有感染力"],
+    words:["鲜活","情绪外露","热情","行动派"],
+    desc:"想到什么就说什么，喜欢的东西会反复喜欢很久。你不太会藏在心里，身边人很容易知道你今天心情怎么样。想到就去做，很少让情绪过夜。",
+    notes:[["前调","黑加仑、苹果、一点菠萝，甜得明亮"],["中调","玫瑰和茉莉，甜里透出一点花气"],["后调","麝香和木质，把甜收住"]],
+    scene:"聚会、逛街、春天出门",
+    avoid:"太沉闷的皮革和烟熏调，像穿了别人的外套",
+    c:"#b0534b", tint:"#f8e5e1", bg:"#fdf3f0", r:"20px", ls:".1em", ink2:"#76352e"
+  },
+  woody: {
+    name:"独处派", tag:"木质调 · 安静",
+    line:["你不冷","只是话没那么多"],
+    words:["克制","安静","想得多","有距离感"],
+    desc:"你喜欢把事情想清楚再开口。人多的时候你在旁边观察，散场之后才觉得活过来了。你不需要太多认可，但被理解的时候会记得很久。",
+    notes:[["前调","雨后的木头和一点柑橘皮，克制"],["中调","雪松、檀香，安静但有存在感"],["后调","麝香收尾，像刚晒过的毛衣"]],
+    scene:"一个人去图书馆、冬天、穿大衣的时候",
+    avoid:"过甜的花果香，会让你觉得吵",
+    c:"#7a5c3e", tint:"#f0e7db", bg:"#f3eee5", r:"8px", ls:".04em", ink2:"#493726"
+  },
+  green: {
+    name:"清透派", tag:"绿叶水生 · 干净",
+    line:["你不抢风头","但你很干净"],
+    words:["干净","有分寸","不打扰","可靠"],
+    desc:"你习惯自己把事情处理好，也很少给别人添麻烦。做事有分寸，答应的事会做到。你可能不是最显眼的那一个，但相处久了会发现你其实很可靠。",
+    notes:[["前调","青草、薄荷和一点海风"],["中调","罗勒、鸢尾，清苦里带一点粉感"],["后调","雪松和苔藓，像雨后的石阶"]],
+    scene:"夏天、上课、通勤、骑车",
+    avoid:"浓香和甜香，会盖掉你本身的清爽",
+    c:"#6b8659", tint:"#eaf0e5", bg:"#f2f6ee", r:"18px", ls:".1em", ink2:"#415436"
+  },
+  sweet: {
+    name:"治愈派", tag:"甜香调 · 温暖",
+    line:["你很容易心软","也很容易饿"],
+    words:["心软","敏感","温暖","需要安全感"],
+    desc:"你对味道、天气、别人的情绪都很敏感。有人不开心，你会第一个发现。你喜欢被照顾，也很会照顾人。对细节很敏感，夜晚尤其安静。",
+    notes:[["前调","香草、焦糖和一点肉桂，暖得直接"],["中调","椰枣、果仁，甜里带一点木质"],["后调","琥珀和麝香，像被毯子包住"]],
+    scene:"秋冬、晚上、自己待着的时候",
+    avoid:"清苦的绿叶调，你会觉得寡淡",
+    c:"#b0844f", tint:"#f7ecdb", bg:"#fcf4e7", r:"26px", ls:".1em", ink2:"#694c2b"
+  },
+  mystery: {
+    name:"神秘派", tag:"辛香东方 · 浓郁",
+    line:["别人猜不透你","你也懒得解释"],
+    words:["独特","有距离","不随大流","有主张"],
+    desc:"你有自己的审美和节奏，不太随大流。喜欢的东西往往偏一点，但你很确定那就是你要的。你说话不多，但偶尔一句会让人记住。",
+    notes:[["前调","胡椒、小豆蔻，一股冲出来的劲"],["中调","烟草、玫瑰、香料，浓但不乱"],["后调","琥珀、乌木，沉下去久久不散"]],
+    scene:"晚上出门、秋冬、正式一点的场合",
+    avoid:"过于甜腻的果香，会让你显得不像自己",
+    c:"#6b4f58", tint:"#f1e8ea", bg:"#f2edf0", r:"5px", ls:".22em", ink2:"#3c2b32"
+  },
+  musk: {
+    name:"沉稳派", tag:"粉感麝香 · 温和",
+    line:["你身上有种","让人放心的味道"],
+    words:["稳","踏实","老派","让人放心"],
+    desc:"你更习惯用做事来表达，而不是用话说。别人慌的时候，通常是你先冷静下来。你有点老派，喜欢把东西用旧、把关系处久。",
+    notes:[["前调","干净的皂感，像刚洗完的衣服"],["中调","鸢尾和紫罗兰的粉感，温柔但有距离"],["后调","麝香和檀香，贴在皮肤上"]],
+    scene:"上课、见长辈、实习、一年四季",
+    avoid:"太跳的果香和甜香，会和你的气质打架",
+    c:"#a3947f", tint:"#f3eee7", bg:"#f7f3ec", r:"4px", ls:".06em", ink2:"#544b3f"
+  }
+};
+
+const SHORT = { citrus:"阳光派", floral:"温柔派", fruity:"元气派", woody:"独处派",
+                green:"清透派", sweet:"治愈派", mystery:"神秘派", musk:"沉稳派" };
+
+/* 次香族补充：说明"你还带着哪种气质" */
+const SHADE = {
+  citrus:"直接、明亮，不太藏情绪",
+  floral:"柔和、会照顾人，先想到别人",
+  fruity:"有活力，情绪来得快去得也快",
+  woody:"安静、想得多，不太主动表达",
+  green:"干净、有分寸，不爱麻烦别人",
+  sweet:"心软、敏感，容易被细节打动",
+  mystery:"有点距离感，不急着让人懂",
+  musk:"稳、踏实，让人放心"
+};
+
+/* =========================================================
+   香水库：8 族 × 10 支（前中后调齐全，按价位分档）
+   tier：学生友好（约 100–300）/ 主流（约 300–600）/ 轻奢（600 以上）
+   sec：这支香水自带的副香族，用来匹配测试的次族
+   ========================================================= */
+const PERFUMES = {
+  citrus: [
+    { cn:"范思哲同名男香", en:"Versace Pour Homme", b:"Versace · EDT", tier:"主流", sec:"floral", why:"清爽不甜，柑橘打头，几乎不会出错" },
+    { cn:"兰蔻 O de", en:"Ô de Lancôme", b:"Lancôme · EDT", tier:"学生友好", sec:"green", why:"便宜大碗，柠檬味干净得像刚洗过脸" },
+    { cn:"卡罗琳娜 CH", en:"CH", b:"Carolina Herrera · EDT", tier:"学生友好", sec:"floral", why:"柑橘配花香，学生党很容易接受" },
+    { cn:"卡沃利天堂", en:"Paradiso", b:"Roberto Cavalli · EDP", tier:"主流", sec:"green", why:"柑橘混青草，夏天喷很轻快" },
+    { cn:"迪奥清新之水", en:"Eau Sauvage", b:"Dior · EDT", tier:"主流", sec:"green", why:"柠檬加香草，六十年都没过时" },
+    { cn:"拉塔法安娜", en:"Ana Abiyedh", b:"Lattafa · EDP", tier:"学生友好", sec:"fruity", why:"柑橘配梨，甜得克制，价格友好" },
+    { cn:"阿玛尼她", en:"Emporio Armani She", b:"Giorgio Armani · EDP", tier:"主流", sec:"musk", why:"柑橘里带一点粉感，温柔又不齁" },
+    { cn:"三宅一生水之力量", en:"L'Eau Majeure d'Issey", b:"Issey Miyake · EDT", tier:"主流", sec:"woody", why:"柑橘配海风，干净的男生味道" },
+    { cn:"帕高幻影", en:"Phantom", b:"Rabanne · EDT", tier:"主流", sec:"green", why:"薰衣草加柠檬，前卫但不难穿" },
+    { cn:"信仰银色山泉", en:"Silver Mountain Water", b:"Creed · EDP", tier:"轻奢", sec:"fruity", why:"经典柑橘，预算够再考虑" }
+  ],
+  floral: [
+    { cn:"YSL 自由之水", en:"Libre", b:"Yves Saint Laurent · EDP", tier:"主流", sec:"citrus", why:"白花加柑橘，刚柔并济，女生入门热门" },
+    { cn:"古驰花悦", en:"Bloom", b:"Gucci · EDP", tier:"主流", sec:"floral", why:"晚香玉白花，温柔但不寡淡" },
+    { cn:"YSL 反转巴黎", en:"Mon Paris", b:"Yves Saint Laurent · EDP", tier:"主流", sec:"fruity", why:"甜花香，约会时氛围感最强" },
+    { cn:"纪梵希心无禁忌", en:"L'Interdit", b:"Givenchy · EDP", tier:"主流", sec:"floral", why:"橙花配茉莉，干净又有存在感" },
+    { cn:"吉驰罪爱", en:"Guilty", b:"Gucci · EDP", tier:"主流", sec:"citrus", why:"花香里有一点点柑橘的锋利" },
+    { cn:"卡罗琳娜 212 VIP", en:"212 VIP", b:"Carolina Herrera · EDP", tier:"主流", sec:"sweet", why:"花香带一点小甜，适合晚上出门" },
+    { cn:"蔻依流浪者", en:"Nomade", b:"Chloé · EDP", tier:"主流", sec:"fruity", why:"花香配李子，柔和但有个性" },
+    { cn:"祖玛珑英国梨", en:"English Pear & Freesia", b:"Jo Malone · EDT", tier:"轻奢", sec:"fruity", why:"梨子加小苍兰，清爽的花果" },
+    { cn:"祖玛珑牡丹", en:"Peony & Blush Suede", b:"Jo Malone · EDT", tier:"轻奢", sec:"fruity", why:"牡丹配苹果，柔中带一点甜" },
+    { cn:"拜里朵白色浪漫", en:"Blanche", b:"Byredo · EDP", tier:"轻奢", sec:"musk", why:"白花加皂感，干净到像刚洗完澡" }
+  ],
+  fruity: [
+    { cn:"Armaf 夜店俱乐部", en:"Club de Nuit Intense Man", b:"Armaf · EDP", tier:"学生友好", sec:"citrus", why:"被称为「平价版拿破仑」，果香带一点烟熏" },
+    { cn:"巴宝莉花与她", en:"Her", b:"Burberry · EDP", tier:"主流", sec:"floral", why:"莓果甜香，年轻女生几乎不会踩雷" },
+    { cn:"Marc Jacobs 小雏菊", en:"Daisy Eau So Fresh", b:"Marc Jacobs · EDT", tier:"主流", sec:"floral", why:"清爽果花香，学生党最常买的一支" },
+    { cn:"卡罗琳娜好女孩", en:"Very Good Girl", b:"Carolina Herrera · EDP", tier:"主流", sec:"floral", why:"荔枝配玫瑰，甜得很利落" },
+    { cn:"莫斯奇诺泰迪熊", en:"Toy 2", b:"Moschino · EDP", tier:"主流", sec:"floral", why:"苹果加白花，可爱但不幼稚" },
+    { cn:"Afnan 至尊银", en:"Supremacy Silver", b:"Afnan · EDP", tier:"学生友好", sec:"woody", why:"苹果配木质，男生平价首选之一" },
+    { cn:"Marc Jacobs 梦幻小雏菊", en:"Daisy Dream", b:"Marc Jacobs · EDT", tier:"主流", sec:"floral", why:"黑莓加荔枝，甜里带一点清" },
+    { cn:"让保罗美丽", en:"La Belle", b:"Jean Paul Gaultier · EDP", tier:"主流", sec:"citrus", why:"青梨加香草，简单好闻" },
+    { cn:"祖玛珑油桃花", en:"Nectarine Blossom & Honey", b:"Jo Malone · EDP", tier:"轻奢", sec:"sweet", why:"油桃加蜂蜜，甜得自然" },
+    { cn:"信仰拿破仑", en:"Aventus", b:"Creed · EDP", tier:"轻奢", sec:"woody", why:"果香木质里的天花板，预算够再考虑" }
+  ],
+  woody: [
+    { cn:"范思哲迪伦蓝", en:"Dylan Blue", b:"Versace · EDT", tier:"主流", sec:"mystery", why:"木质里最不挑人的一支，新手友好" },
+    { cn:"Afnan 九点之夜", en:"9 PM Night Out", b:"Afnan · EDP", tier:"学生友好", sec:"sweet", why:"木质甜香，男生里的爆款，价格友好" },
+    { cn:"蒂普提克檀道", en:"Tam Dao", b:"Diptyque · EDT", tier:"轻奢", sec:"woody", why:"真正的高级檀木，预算够值得试一次" },
+    { cn:"万宝龙探索者", en:"Explorer", b:"Montblanc · EDP", tier:"主流", sec:"woody", why:"香根草加皮革，干净有力量感" },
+    { cn:"万宝龙传奇精神", en:"Legend Spirit", b:"Montblanc · EDT", tier:"主流", sec:"mystery", why:"木质带一点水生，夏天也能用" },
+    { cn:"Armaf 里程碑", en:"Club de Nuit Milestone", b:"Armaf · EDP", tier:"学生友好", sec:"green", why:"木质配海风，性价比很高" },
+    { cn:"蒂普提克奥费恩", en:"Orphéon", b:"Diptyque · EDP", tier:"轻奢", sec:"green", why:"雪松加杜松，像走进一间老书店" },
+    { cn:"拜里朵超级雪松", en:"Super Cedar", b:"Byredo · EDP", tier:"轻奢", sec:"woody", why:"纯粹的雪松，简单但高级" },
+    { cn:"帕尔马莱顿", en:"Layton", b:"Parfums de Marly · EDP", tier:"轻奢", sec:"sweet", why:"苹果加香草木质，甜得有质感" },
+    { cn:"拜里朵周日古龙", en:"Sunday Cologne", b:"Byredo · EDP", tier:"轻奢", sec:"mystery", why:"香柠檬加薰衣草，松散的周末感" }
+  ],
+  green: [
+    { cn:"拉夫劳伦蓝马球", en:"Polo Blue", b:"Ralph Lauren · EDP", tier:"主流", sec:"woody", why:"海风加草本，夏天通勤最舒服" },
+    { cn:"雨果博斯 HUGO", en:"HUGO Man", b:"Hugo Boss · EDT", tier:"学生友好", sec:"green", why:"薄荷和薰衣草，干净利落，不张扬" },
+    { cn:"祖玛珑鼠尾草与海盐", en:"Wood Sage & Sea Salt", b:"Jo Malone · EDT", tier:"轻奢", sec:"green", why:"鼠尾草配海盐，像站在海边吹风" },
+    { cn:"宝格丽水能量", en:"Aqva Pour Homme", b:"Bvlgari · EDT", tier:"主流", sec:"green", why:"海水味很足，夏天一喷就凉快" },
+    { cn:"CK Be", en:"CK Be", b:"Calvin Klein · EDT", tier:"学生友好", sec:"musk", why:"中性、干净，学生党入门款" },
+    { cn:"拉塔法法哈尔黑", en:"Fakhar Black", b:"Lattafa · EDP", tier:"学生友好", sec:"green", why:"平价里少见的清爽绿叶" },
+    { cn:"杜嘉班纳 K", en:"K by Dolce&Gabbana", b:"Dolce&Gabbana · EDP", tier:"主流", sec:"woody", why:"杜松加无花果，干净又有木头底" },
+    { cn:"娇兰花草水语薄荷", en:"Aqua Allegoria Herba Fresca", b:"Guerlain · EDT", tier:"主流", sec:"green", why:"薄荷加青草，像一口冰水" },
+    { cn:"妮姗爱琴海", en:"Ege", b:"Nishane · Extrait", tier:"轻奢", sec:"mystery", why:"柚子加罗勒，地中海的风" },
+    { cn:"祖玛珑黑莓与月桂", en:"Blackberry & Bay", b:"Jo Malone · EDT", tier:"轻奢", sec:"fruity", why:"月桂叶带一点果香，很有记忆点" }
+  ],
+  sweet: [
+    { cn:"拉塔法卡姆拉", en:"Khamrah", b:"Lattafa · EDP", tier:"学生友好", sec:"mystery", why:"平价爆款，肉桂椰枣的暖甜，秋冬必备" },
+    { cn:"拉塔法雅拉", en:"Yara", b:"Lattafa · EDP", tier:"学生友好", sec:"fruity", why:"奶油甜香，女生入门最容易喜欢" },
+    { cn:"拉塔法卡姆拉咖啡", en:"Khamrah Qahwa", b:"Lattafa · EDP", tier:"学生友好", sec:"mystery", why:"卡姆拉的咖啡版，更浓一点" },
+    { cn:"Marc Jacobs 完美", en:"Perfect", b:"Marc Jacobs · EDP", tier:"主流", sec:"green", why:"杏仁奶配大黄，甜里有一点清爽" },
+    { cn:"艾莉萨博现在的女孩", en:"Girl of Now", b:"Elie Saab · EDP", tier:"主流", sec:"sweet", why:"开心果加杏仁，像一份甜点" },
+    { cn:"凯利安天使之享", en:"Angels' Share", b:"Kilian · EDP", tier:"轻奢", sec:"woody", why:"干邑加肉桂，成熟一点的甜" },
+    { cn:"卡罗琳娜好女孩腮红", en:"Good Girl Blush", b:"Carolina Herrera · EDP", tier:"主流", sec:"floral", why:"杏仁加依兰，甜得温柔" },
+    { cn:"莲娜丽姿妮娜幻想", en:"Nina Fantasy", b:"Nina Ricci · EDT", tier:"主流", sec:"floral", why:"糖果加香草，少女感很强" },
+    { cn:"大卫杜夫冷水加强", en:"Cool Water Intense", b:"Davidoff · EDP", tier:"学生友好", sec:"citrus", why:"椰子和柑橘，甜里带凉" },
+    { cn:"华伦天奴罗马诞生", en:"Born in Roma Extradose", b:"Valentino · EDP", tier:"轻奢", sec:"sweet", why:"黑加仑加朗姆，甜得有态度" }
+  ],
+  mystery: [
+    { cn:"YSL 暗夜男士", en:"La Nuit de L'Homme", b:"Yves Saint Laurent · EDP", tier:"主流", sec:"woody", why:"胡椒和薰衣草，稳中带一点冲劲" },
+    { cn:"拉塔法阿萨德", en:"Asad", b:"Lattafa · EDP", tier:"学生友好", sec:"woody", why:"烟草加香草，便宜但闻着很有气场" },
+    { cn:"Afnan 九点灵药", en:"9 PM Elixir", b:"Afnan · EDP", tier:"学生友好", sec:"mystery", why:"香料加皮革，平价里的重口味" },
+    { cn:"雨果博斯瓶子", en:"Boss Bottled", b:"Hugo Boss · EDP", tier:"主流", sec:"mystery", why:"苹果加肉桂，商务场合不出错" },
+    { cn:"维果罗夫香料炸弹", en:"Spicebomb Extreme", b:"Viktor&Rolf · EDP", tier:"主流", sec:"mystery", why:"一喷就是胡椒和藏红花，很有攻击性" },
+    { cn:"普拉达红月号海洋", en:"Luna Rossa Ocean", b:"Prada · EDP", tier:"主流", sec:"citrus", why:"葡萄柚加乳香，冷调的神秘" },
+    { cn:"帕尔马希律王", en:"Herod", b:"Parfums de Marly · EDP", tier:"轻奢", sec:"mystery", why:"肉桂加烟草，像一杯热红酒" },
+    { cn:"阿兹罗夜之渴望", en:"Wanted by Night", b:"Azzaro · EDP", tier:"主流", sec:"woody", why:"柑橘开头，后面是木头和烟草" },
+    { cn:"妮姗阿尼", en:"Ani", b:"Nishane · Extrait", tier:"轻奢", sec:"woody", why:"黑加仑配香草，浓但不腻" },
+    { cn:"梅莫非洲皮革", en:"African Leather", b:"Memo Paris · EDP", tier:"轻奢", sec:"floral", why:"香料加皮革，很有异域感" }
+  ],
+  musk: [
+    { cn:"纪梵希绅士", en:"Gentleman", b:"Givenchy · EDP", tier:"主流", sec:"mystery", why:"粉感木质，比同龄人成熟一点" },
+    { cn:"纳西索同名黑瓶", en:"For Her", b:"Narciso Rodriguez · EDP", tier:"主流", sec:"fruity", why:"皂感麝香的代表作，干净又不甜" },
+    { cn:"马丁马吉拉海滩漫步", en:"Replica Beach Walk", b:"Maison Margiela · EDT", tier:"轻奢", sec:"citrus", why:"椰子加海盐，像走在沙滩上" },
+    { cn:"高田贤三男香", en:"Kenzo Homme", b:"Kenzo · EDP", tier:"主流", sec:"woody", why:"海风加皮革，干净又稳" },
+    { cn:"雨果博斯瓶子之夜", en:"Boss Bottled Night", b:"Hugo Boss · EDT", tier:"主流", sec:"green", why:"薰衣草加桦木，晚上的干净感" },
+    { cn:"普拉达糖果之吻", en:"Candy Kiss", b:"Prada · EDP", tier:"主流", sec:"musk", why:"纯麝香，像刚洗完澡的皮肤" },
+    { cn:"迪奥桀骜加强", en:"Dior Homme Intense", b:"Dior · EDP", tier:"轻奢", sec:"musk", why:"鸢尾粉感，公认的绅士香" },
+    { cn:"杜嘉班纳唯一", en:"The Only One", b:"Dolce&Gabbana · EDP", tier:"主流", sec:"sweet", why:"紫罗兰加咖啡，粉里带一点暖" },
+    { cn:"Afnan 至尊紫", en:"Supremacy Purple", b:"Afnan · EDP", tier:"学生友好", sec:"citrus", why:"橙花加麝香，平价里少见的干净" },
+    { cn:"高田贤三爱慕", en:"Amour", b:"Kenzo · EDP", tier:"主流", sec:"floral", why:"米香加茉莉，很安静的一支" }
+  ]
+};
+
+/* 答题页右上角的话，每次随机 */
+const HINTS = [
+  "鼻子记得住的事，脑子会忘",
+  "别分析，选第一眼的",
+  "气味比语言诚实",
+  "你的第一反应，通常最准",
+  "香气先于语言抵达",
+  "别想，先闻",
+  "选那个让你放松的",
+  "没有标准答案"
+];
+
+/* =========================================================
+   逻辑
+   ========================================================= */
+const screenEl = document.getElementById("screen");
+let idx = 0, scores = {}, round = [], locked = false, history = [];
+const KEYS = ["citrus","floral","fruity","woody","green","sweet","mystery","musk"];
+
+function shuffle(a){
+  const arr = a.slice();
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+/* 抽题：从题库挑 10 道，重复抽候选，选各族分布最均匀的一组 */
+function pickQuestions(n){
+  let bestScore = Infinity, pool = [];
+  const avg = n * 4 / KEYS.length;
+  for(let t=0;t<800;t++){
+    const picked = shuffle(QUESTIONS).slice(0, n);
+    const cnt = {};
+    KEYS.forEach(k => cnt[k] = 0);
+    picked.forEach(q => q.options.forEach(o => cnt[o.k]++));
+    let s = 0;
+    KEYS.forEach(k => { s += (cnt[k] - avg) * (cnt[k] - avg); });
+    if(s < bestScore){ bestScore = s; pool = [picked]; }
+    else if(s === bestScore){ pool.push(picked); }
+  }
+  const best = pool[Math.floor(Math.random() * pool.length)];
+  return best.map(q => ({ q:q.q, sub:q.sub, options: shuffle(q.options) }));
+}
+
+
+/* ---------- 香调音乐：本地音频文件 ---------- */
+const MUSIC_FILES = {
+  citrus: "assets/music/citrus.mp3",
+  floral: "assets/music/floral.mp3",
+  fruity: "assets/music/fruity.mp3",
+  woody:  "assets/music/woody.mp3",
+  green:  "assets/music/green.mp3",
+  sweet:  "assets/music/sweet.mp3",
+  mystery:"assets/music/mystery.mp3",
+  musk:   "assets/music/musk.mp3"
+};
+let musicOn = true, musicKey = null;
+
+function bgmEl(){ return document.getElementById("bgm"); }
+
+function playMusic(key){
+  musicKey = key;
+  const el = bgmEl();
+  if(!el) return;
+  if(!musicOn){ el.pause(); return; }
+  try{ el.currentTime = 0; }catch(e){}
+  const p = el.play();
+  if(p && p.catch) p.catch(function(){});
+}
+
+function stopMusic(){
+  const el = bgmEl();
+  if(el){ el.pause(); }
+}
+
+function toggleMusic(){
+  musicOn = !musicOn;
+  const btn = document.getElementById("musicToggle");
+  const el = bgmEl();
+  if(musicOn){
+    if(el){ const p = el.play(); if(p && p.catch) p.catch(function(){}); }
+    if(btn){ btn.textContent = "♪ 音乐 开"; btn.classList.remove("off"); }
+  }else{
+    if(el){ el.pause(); }
+    if(btn){ btn.textContent = "♪ 音乐 关"; btn.classList.add("off"); }
+  }
+}
+
+function renderCover(){
+  stopMusic();
+  const root = document.documentElement.style;
+  root.setProperty("--page-bg", "#f5f1ea");
+  root.setProperty("--c", "#8a6a4b");
+  root.setProperty("--ink2", "#3d3730");
+  root.removeProperty("--tint");
+  root.removeProperty("--r");
+  root.removeProperty("--ls");
+
+  screenEl.innerHTML = `
+    <section class="cover fade">
+      <div class="hero">
+        <div class="glow"></div>
+        <svg width="132" height="216" viewBox="0 0 132 216" fill="none" aria-hidden="true">
+          <rect x="52" y="6" width="28" height="30" rx="5" fill="#3b332d"/>
+          <rect x="59" y="36" width="14" height="16" fill="#d8cab7"/>
+          <path d="M38 52h56a12 12 0 0 1 12 12v120a16 16 0 0 1-16 16H42a16 16 0 0 1-16-16V64a12 12 0 0 1 12-12z"
+                fill="#f3ebe0" stroke="#d3c3ad" stroke-width="1.4"/>
+          <path d="M38 118h56v66a16 16 0 0 1-16 16H42a16 16 0 0 1-16-16v-66z" fill="#c99655" opacity=".78"/>
+          <rect x="47" y="70" width="7" height="92" rx="3.5" fill="#fff" opacity=".55"/>
+          <line x1="38" y1="118" x2="94" y2="118" stroke="#fff" stroke-width="1.2" opacity=".5"/>
+        </svg>
+      </div>
+      <div class="eyebrow">香 调 人 格 测 试</div>
+      <h1>闻香识你</h1>
+      <div class="en">Scent · Personality</div>
+      <p>十道题，找到与你最像的那一类香气，<br>以及三支真正适合你的香水。</p>
+      <div class="meta">约 90 秒 · 无需登录 · 不收集信息</div>
+      <button class="btn wide" onclick="beginQuiz()">开始测试</button>
+    </section>`;
+}
+
+function beginQuiz(){
+  idx = 0;
+  locked = false;
+  history = [];
+  round = pickQuestions(10);
+  scores = {};
+  KEYS.forEach(k => scores[k] = 0);
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = round[idx];
+  const pct = Math.round((idx / round.length) * 100);
+  const hint = HINTS[Math.floor(Math.random()*HINTS.length)];
+  const opts = q.options.map(o =>
+    `<button class="opt" style="--c:${RESULTS[o.k].c}" onclick="choose('${o.k}', this)">
+       <span class="dot"></span>
+       <span><b>${o.t}</b><small>${o.d}</small></span>
+     </button>`
+  ).join("");
+
+  screenEl.innerHTML = `
+    <section class="fade">
+      <div class="progress"><i style="width:${pct}%"></i></div>
+      <div class="q-head">
+        <span class="q-index">${String(idx + 1).padStart(2,"0")} / ${round.length}</span>
+        <span class="q-hint">${hint}</span>
+      </div>
+      <h2 class="q-title">${q.q}</h2>
+      <p class="q-sub">${q.sub}</p>
+      ${opts}
+      ${idx > 0 ? `<button class="back" onclick="goBack()">← 上一题</button>` : ""}
+    </section>`;
+  window.scrollTo(0, 0);
+}
+
+function goBack(){
+  if(idx === 0 || locked) return;
+  idx -= 1;
+  const k = history.pop();
+  if(k) scores[k] -= 1;
+  renderQuestion();
+}
+
+function choose(key, el){
+  if(locked) return;
+  locked = true;
+  if(el) el.classList.add("picked");
+  scores[key] += 1;
+  history.push(key);
+  setTimeout(() => {
+    locked = false;
+    idx += 1;
+    if(idx < round.length) renderQuestion();
+    else renderResult();
+  }, 220);
+}
+
+/* 从香水库里挑 3 支：优先贴合次族，并尽量让价位错开 */
+function pickPerfumes(main, second){
+  const pool = PERFUMES[main] || [];
+  const chosen = [];
+  const tiers = new Set();
+
+  // 第一轮：贴着次族的，最多 2 支，且价位不重复
+  for(const p of pool){
+    if(chosen.length >= 2) break;
+    if(p.sec === second && !tiers.has(p.tier)){
+      chosen.push(p); tiers.add(p.tier);
+    }
+  }
+  // 第二轮：补不同价位
+  for(const p of pool){
+    if(chosen.length >= 3) break;
+    if(!chosen.includes(p) && !tiers.has(p.tier)){
+      chosen.push(p); tiers.add(p.tier);
+    }
+  }
+  // 第三轮：还差就随便补
+  for(const p of pool){
+    if(chosen.length >= 3) break;
+    if(!chosen.includes(p)) chosen.push(p);
+  }
+  return chosen.slice(0, 3);
+}
+
+function renderResult(){
+  const ranked = KEYS.slice().sort((a,b) => scores[b] - scores[a]);
+  const mainKey = ranked[0], secondKey = ranked[1];
+  const r = RESULTS[mainKey];
+  const top = scores[mainKey];
+  const second = scores[secondKey];
+  const diff = top - second;
+
+  window.__last = { mainKey, secondKey };
+
+  const root = document.documentElement.style;
+  root.setProperty("--page-bg", r.bg);
+  root.setProperty("--c", r.c);
+  root.setProperty("--tint", r.tint);
+  root.setProperty("--ink2", r.ink2);
+  root.setProperty("--r", r.r);
+  root.setProperty("--ls", r.ls);
+
+  /* 依据一：选了多少题 */
+  let strength;
+  if(top >= 6) strength = `十道题里，你有 ${top} 道选了同一类气质，倾向非常明确。`;
+  else if(top >= 4) strength = `十道题里，有 ${top} 道指向这一类，倾向比较明显。`;
+  else strength = `你的答案比较分散，这一类只是略微领先，说明你在几种气质之间摇摆。`;
+
+  /* 依据二：和次族的差距 */
+  let combo;
+  if(diff >= 4) combo = `几乎整份答案都指向同一种气质——你是很典型的${r.name}。`;
+  else if(diff >= 2) combo = `你是典型的${r.name}，但身上还留着一点${SHORT[secondKey]}的影子：${SHADE[secondKey]}。`;
+  else combo = `你在${r.name}和${SHORT[secondKey]}之间几乎不分上下，两种气质在你身上轮流出现，这并不矛盾。`;
+
+  /* 香调组成：取前 3 族 */
+  const maxScore = Math.max(top, 1);
+  const compBars = ranked.filter(k => scores[k] > 0).slice(0, 3).map(k => `
+    <div class="bar-row">
+      <em>${SHORT[k]}</em>
+      <div class="bar-track"><i data-w="${Math.round(scores[k]/maxScore*100)}" style="background:${RESULTS[k].c}"></i></div>
+    </div>`).join("");
+
+  /* 香调画像：三色 + 进场动画 */
+  const opa = [1, .72, .5];
+  const bars = r.notes.map((n,i) => `
+    <div class="bar-row">
+      <em>${n[0]}</em>
+      <div class="bar-track">
+        <i data-w="${[100,76,54][i]}" style="background:${r.c};opacity:${opa[i]}"></i>
+      </div>
+    </div>
+    <div class="bar-desc">${n[1]}</div>`).join("");
+
+  const picks = pickPerfumes(mainKey, secondKey);
+  const picksHtml = picks.map((p,i) => `
+    <div class="pick">
+      <span class="no">0${i+1}</span>
+      <span class="pick-body">
+        <b>${p.cn}<span class="tier">${p.tier}</span></b>
+        <small>${p.en} · ${p.b}</small>
+        <em>${p.why}</em>
+      </span>
+    </div>`).join("");
+
+  screenEl.innerHTML = `
+    <section class="result" style="--c:${r.c};--tint:${r.tint}">
+      <button class="music-toggle${musicOn ? "" : " off"}" id="musicToggle" onclick="toggleMusic()">♪ 音乐 ${musicOn ? "开" : "关"}</button>
+      <audio id="bgm" loop preload="auto" src="${MUSIC_FILES[mainKey]}" style="position:fixed;top:52px;right:14px;width:170px;height:30px;z-index:39;opacity:.75"></audio>
+      <div class="hero-card">
+        <div class="kicker">你 的 香 调 人 格</div>
+        <div class="name">${r.name}</div>
+        <div class="tag">${r.tag}</div>
+        <div class="art">${ART[mainKey]}</div>
+        <p class="line"><span>${r.line[0]}</span><span>${r.line[1]}</span></p>
+        <div class="words">${r.words.map(w => `<span>${w}</span>`).join("")}</div>
+      </div>
+
+      <div class="block">
+        <h3>关于你</h3>
+        <p>${r.desc}</p>
+        <p class="basis">${strength}${combo}</p>
+      </div>
+
+      <div class="block">
+        <h3>你的香调组成</h3>
+        <div class="bars comp">${compBars}</div>
+      </div>
+
+      <div class="block">
+        <h3>你的香调画像</h3>
+        <div class="bars" id="notesBars">${bars}</div>
+      </div>
+
+      <div class="block">
+        <h3>场合与香调</h3>
+        <div class="duo">
+          <div class="mini"><b>适合的场合</b>${r.scene}</div>
+          <div class="mini"><b>建议避开的香调</b>${r.avoid}</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>为你挑的三支</h3>
+        <div class="picks">${picksHtml}</div>
+        <div class="source-note">依据你的主香调与次香调，从 1,479 支真实香水中筛出</div>
+      </div>
+
+      <div class="share-tip">生成一张属于你的香调卡片<br>发给朋友，看看你们的香调合不合</div>
+      <button class="btn" style="margin-top:16px;" onclick="generateShare()">生成分享图</button>
+      <button class="btn ghost" style="margin-top:10px;" onclick="renderCover()">再测一次</button>
+      <p class="music-credit">音乐 · Kevin MacLeod (incompetech.com) · CC BY 4.0</p>
+    </section>`;
+
+  window.scrollTo(0, 0);
+  playMusic(mainKey);
+
+  /* 加载条动画：从 0 长到目标值 */
+  requestAnimationFrame(() => {
+    document.querySelectorAll(".bar-track i[data-w]").forEach((el, i) => {
+      setTimeout(() => { el.style.width = el.dataset.w + "%"; }, 120 + i * 130);
+    });
+    document.querySelectorAll("#notesBars .bar-track i").forEach(el => {
+      el.style.transition = "width .9s cubic-bezier(.22,.8,.3,1)";
+    });
+  });
+}
+
+/* ---------- 每个香族一张手绘 SVG ---------- */
+const ART = {
+  citrus: `<svg viewBox="0 0 120 120" fill="none">
+    <circle cx="60" cy="62" r="43" fill="#f7e2c2" stroke="#c9843a" stroke-width="2.2"/>
+    <circle cx="60" cy="62" r="34" fill="#fbedd8" stroke="#dca95f" stroke-width="1.2"/>
+    <g stroke="#dca95f" stroke-width="1.2">
+      <line x1="60" y1="62" x2="60" y2="28"/><line x1="60" y1="62" x2="84" y2="38"/>
+      <line x1="60" y1="62" x2="94" y2="62"/><line x1="60" y1="62" x2="84" y2="86"/>
+      <line x1="60" y1="62" x2="60" y2="96"/><line x1="60" y1="62" x2="36" y2="86"/>
+      <line x1="60" y1="62" x2="26" y2="62"/><line x1="60" y1="62" x2="36" y2="38"/>
+    </g>
+    <circle cx="60" cy="62" r="6" fill="#dca95f"/>
+    <path d="M96 30q10-9 17 1-10 7-17-1z" fill="#8fae72" stroke="#6f8a5c" stroke-width="1.2"/>
+  </svg>`,
+  floral: `<svg viewBox="0 0 120 120" fill="none">
+    <g fill="#f9e6ec" stroke="#bd7f92" stroke-width="1.6">
+      <ellipse cx="60" cy="36" rx="15" ry="21"/>
+      <ellipse cx="60" cy="36" rx="15" ry="21" transform="rotate(72 60 60)"/>
+      <ellipse cx="60" cy="36" rx="15" ry="21" transform="rotate(144 60 60)"/>
+      <ellipse cx="60" cy="36" rx="15" ry="21" transform="rotate(216 60 60)"/>
+      <ellipse cx="60" cy="36" rx="15" ry="21" transform="rotate(288 60 60)"/>
+    </g>
+    <circle cx="60" cy="60" r="12" fill="#eccd75" stroke="#c9a44a" stroke-width="1.4"/>
+    <circle cx="56" cy="57" r="1.8" fill="#c9a44a"/><circle cx="64" cy="57" r="1.8" fill="#c9a44a"/>
+    <circle cx="60" cy="63" r="1.8" fill="#c9a44a"/>
+  </svg>`,
+  fruity: `<svg viewBox="0 0 120 120" fill="none">
+    <path d="M60 34q-7 26-19 43" stroke="#7c6a4f" stroke-width="2.4"/>
+    <path d="M60 34q9 24 23 41" stroke="#7c6a4f" stroke-width="2.4"/>
+    <path d="M60 34q14-15 28-9-9 15-28 9z" fill="#8fae72" stroke="#6f8a5c" stroke-width="1.3"/>
+    <circle cx="37" cy="82" r="19" fill="#c25a50" stroke="#9c443c" stroke-width="1.6"/>
+    <circle cx="86" cy="80" r="19" fill="#c25a50" stroke="#9c443c" stroke-width="1.6"/>
+    <circle cx="31" cy="76" r="4" fill="#fff" opacity=".45"/>
+    <circle cx="80" cy="74" r="4" fill="#fff" opacity=".45"/>
+  </svg>`,
+  woody: `<svg viewBox="0 0 120 120" fill="none">
+    <path d="M20 86V60a40 14 0 0 1 80 0v26" fill="#f1e5d4" stroke="#7a5c3e" stroke-width="1.8"/>
+    <ellipse cx="60" cy="86" rx="40" ry="14" fill="#e6d5bf" stroke="#7a5c3e" stroke-width="1.8"/>
+    <ellipse cx="60" cy="60" rx="40" ry="14" fill="#f7eddf" stroke="#7a5c3e" stroke-width="1.8"/>
+    <ellipse cx="60" cy="60" rx="26" ry="9" fill="none" stroke="#b79a78" stroke-width="1.2"/>
+    <ellipse cx="60" cy="60" rx="13" ry="4.6" fill="none" stroke="#b79a78" stroke-width="1.2"/>
+    <circle cx="60" cy="60" r="2.4" fill="#b79a78"/>
+  </svg>`,
+  green: `<svg viewBox="0 0 120 120" fill="none">
+    <path d="M30 94C30 52 61 26 99 26c0 38-27 68-69 68z" fill="#e2ecd6" stroke="#6b8659" stroke-width="2"/>
+    <path d="M30 94c21-21 43-46 69-68" stroke="#6b8659" stroke-width="1.4"/>
+    <path d="M58 66l-4-24" stroke="#93ab7e" stroke-width="1"/>
+    <path d="M70 54l8-17" stroke="#93ab7e" stroke-width="1"/>
+    <path d="M47 77l-8-18" stroke="#93ab7e" stroke-width="1"/>
+  </svg>`,
+  sweet: `<svg viewBox="0 0 120 120" fill="none">
+    <path d="M36 62h48l-6 33a8 8 0 0 1-8 7H50a8 8 0 0 1-8-7z" fill="#f3e0c4" stroke="#b0844f" stroke-width="1.8"/>
+    <path d="M31 62q4-27 29-27t29 27z" fill="#f8e9d9" stroke="#b0844f" stroke-width="1.8"/>
+    <circle cx="60" cy="30" r="7" fill="#c76a5f" stroke="#a5544b" stroke-width="1.3"/>
+    <path d="M60 23q2-9 9-11" stroke="#6b8659" stroke-width="1.5"/>
+    <path d="M45 70l3 25M55 70l2 32M65 70l-2 32M75 70l-3 25" stroke="#dcc7a8" stroke-width="1"/>
+  </svg>`,
+  mystery: `<svg viewBox="0 0 120 120" fill="none">
+    <path d="M50 26q-11 11 0 22t0 20" stroke="#b9a6ae" stroke-width="2"/>
+    <path d="M69 30q-11 11 0 20t0 15" stroke="#b9a6ae" stroke-width="2"/>
+    <path d="M34 86q26-19 52 0-6 22-26 22t-26-22z" fill="#f0e9eb" stroke="#6b4f58" stroke-width="1.8"/>
+    <ellipse cx="60" cy="86" rx="26" ry="6.5" fill="#e2d4d9" stroke="#6b4f58" stroke-width="1.4"/>
+    <circle cx="60" cy="86" r="3" fill="#7d5a64"/>
+    <path d="M26 92h68" stroke="#e4dcd1" stroke-width="1.4"/>
+  </svg>`,
+  musk: `<svg viewBox="0 0 120 120" fill="none">
+    <rect x="49" y="14" width="22" height="22" rx="4" fill="#4a423b"/>
+    <rect x="55" y="36" width="10" height="12" fill="#d8cab7"/>
+    <path d="M38 48h44a9 9 0 0 1 9 9v41a13 13 0 0 1-13 13H42a13 13 0 0 1-13-13V57a9 9 0 0 1 9-9z"
+          fill="#f6efe4" stroke="#b0a08a" stroke-width="1.7"/>
+    <path d="M38 84h44v14a13 13 0 0 1-13 13H42a13 13 0 0 1-13-13V84z" fill="#cbb79c" opacity=".75"/>
+    <rect x="46" y="56" width="6" height="40" rx="3" fill="#fff" opacity=".5"/>
+    <line x1="38" y1="84" x2="82" y2="84" stroke="#fff" stroke-width="1.1" opacity=".55"/>
+  </svg>`
+};
+
+/* =========================================================
+   分享图：用 canvas 画一张 900×1250 的卡片
+   ========================================================= */
+function hexA(hex,a){
+  const n=parseInt(hex.slice(1),16);
+  return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+function drawRadar(ctx,cx,cy,R,color){
+  const angles = KEYS.map((_,i) => -Math.PI/2 + i*2*Math.PI/KEYS.length);
+  const max = Math.max(1, ...KEYS.map(k => scores[k] || 0));
+
+  // 三层网格
+  for(let ring=1; ring<=3; ring++){
+    ctx.beginPath();
+    angles.forEach((a,i)=>{
+      const x=cx+Math.cos(a)*R*ring/3, y=cy+Math.sin(a)*R*ring/3;
+      i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+    });
+    ctx.closePath();
+    ctx.strokeStyle='rgba(90,75,60,.14)';
+    ctx.lineWidth=1.2;
+    ctx.stroke();
+  }
+  // 轴线
+  angles.forEach(a=>{
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(a)*R, cy+Math.sin(a)*R);
+    ctx.strokeStyle='rgba(90,75,60,.10)';
+    ctx.stroke();
+  });
+  // 数据多边形
+  ctx.beginPath();
+  angles.forEach((a,i)=>{
+    const v=(scores[KEYS[i]]||0)/max;
+    const rr=R*Math.max(.12,v);
+    const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
+    i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+  });
+  ctx.closePath();
+  ctx.fillStyle=hexA(color,.26);
+  ctx.fill();
+  ctx.strokeStyle=color;
+  ctx.lineWidth=3;
+  ctx.stroke();
+  // 顶点
+  angles.forEach((a,i)=>{
+    const v=(scores[KEYS[i]]||0)/max;
+    const rr=R*Math.max(.12,v);
+    ctx.beginPath();
+    ctx.arc(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr, 5.5, 0, Math.PI*2);
+    ctx.fillStyle=color;
+    ctx.fill();
+  });
+  // 外圈标签
+  ctx.font='500 21px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle='rgba(70,58,46,.78)';
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  angles.forEach((a,i)=>{
+    ctx.fillText(SHORT[KEYS[i]], cx+Math.cos(a)*(R+44), cy+Math.sin(a)*(R+44));
+  });
+  ctx.textBaseline='alphabetic';
+}
+
+/* 二维码（已内嵌，指向线上测试页） */
+const QR_SRC = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA4QAAAOEAQMAAADDgG14AAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD3ElEQVR4nO3cS27bMBQFUBodeJgleClamrQ0LcVLyDCDIGwMkeJHspsCrdEq505im3w8zPCBlEIQEREROWxe4r1c20lzCKfPP2/l1x+fX1+Xj6dU8zkp3F0wEolEIpFIJBKJROLzxCn0OSdxjPG9iHXatT5STRLfNwuGgUgkEolEIpFIJBKPL56q8kpsk7u5yzIvrzvuipey4CuRSCQSiUQikUgk/kPiWH6dN5NyeVzEHCKRSCQSiUQikUgktmJobv6F7UiXmUgkEolEIpFIJBK/s9il6+ZySZv3tvzcil2IRCKRSCQSiUQi8bnifpKY153bO4GhdF3j5k7gnRCJRCKRSCQSiUTiUcVfpjqd2rn5F8La8r19cUEikUgkEolEIpFIPJ64082FpTOrsnNSVu1lKn3eUEauYe3zUjNIJBKJRCKRSCQSiU8UU0l+xilu+qTu3CqlOrfKmUPz9NNUJqe9EIlEIpFIJBKJROJ3EIfYp7oTeMt5M6F+3iqu6/Ziu30ikUgkEolEIpFIPKSYM5SSLkO5E3iJ63nY62ZSLcYHJ2VEIpFIJBKJRCKR+NfE7bq3kp0OqsvDDVd3AuN2W0QikUgkEolEIpF4OPFl+bF7aUS++VeVDMvH28ilFavM4Wt3AolEIpFIJBKJRCLxWOJOqhWmsu68fLz1edcyKT1v9RHKG9FDectFNelhiEQikUgkEolEIvGPi2MZnMMX3ixxievpVLXYuZS/75YTiUQikUgkEolE4mHF27epnZDw6/Kt68xy2vKd9/ldy7+yvRNIJBKJRCKRSCQSiccTq8zhXjcXy3lYtZe02Kktz5na1wESiUQikUgkEolE4vPEqS1p161Sd1BpfnduFeN6onUtNbvdHJFIJBKJRCKRSCQeT8wf57B2c5dlpOvZKjHf/Bvb563i5s0SL+VfIRKJRCKRSCQSicQjizvdXCwltwyxyX55l26ESCQSiUQikUgkEp8jPs7YLLBzJ7AbmUvpZbsBIpFIJBKJRCKRSDyq+LIdSLm24vzo3KqaVJ9bpWzvBBKJRCKRSCQSiUTi8cQp9Kl6tpxhqc63BUO5LTje7eamYpQRIpFIJBKJRCKRSHyS2F3dy+K49EmpAcvrpkndhs9xk2phIpFIJBKJRCKRSPzWYpXuTmCXqpv70ZbfWr5h3SWRSCQSiUQikUgkflNx573nsdwJrDLEe5nXOUQikUgkEolEIpH4JLFLJVbr1k8/bXNuiVT+kQwikUgkEolEIpFIPLq4n04cNhPybcGp7OU2Kc2/lIm/+S4LIpFIJBKJRCKRSPzvRBEREZFD5ifL/oMC0/TBLgAAAABJRU5ErkJggg==";
+
+function generateShare(){
+  const d = window.__last || {};
+  const r = RESULTS[d.mainKey] || RESULTS.woody;
+  const W=900, H=1250, scale=2;
+
+  const cv = document.createElement('canvas');
+  cv.width = W*scale; cv.height = H*scale;
+  const ctx = cv.getContext('2d');
+  ctx.scale(scale, scale);
+
+  const qr = new Image();
+  qr.onload = () => {
+
+  // 背景
+  ctx.fillStyle = r.tint;
+  ctx.fillRect(0,0,W,H);
+  const g = ctx.createLinearGradient(0,0,0,H*0.6);
+  g.addColorStop(0,'rgba(255,255,255,.5)');
+  g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,W,H*0.6);
+
+  ctx.textAlign='center';
+
+  ctx.fillStyle='rgba(70,58,46,.55)';
+  ctx.font='500 18px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillText('闻 香 识 你 · 香 调 人 格 测 试', W/2, 92);
+
+  ctx.fillStyle='rgba(80,66,52,.62)';
+  ctx.font='400 25px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillText('我的人格是', W/2, 176);
+
+  ctx.fillStyle=r.ink2;
+  ctx.font='600 78px "Songti SC","STSong",serif';
+  ctx.fillText(r.name, W/2, 276);
+
+  ctx.fillStyle=r.c;
+  ctx.font='400 27px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillText(r.tag, W/2, 330);
+
+  ctx.fillStyle=r.ink2;
+  ctx.font='400 33px "Songti SC","STSong",serif';
+  ctx.fillText(r.line[0], W/2, 412);
+  ctx.fillText(r.line[1], W/2, 462);
+
+  drawRadar(ctx, W/2, 742, 188, r.c);
+
+  // 关键词
+  ctx.font='500 23px -apple-system,"PingFang SC",sans-serif';
+  const pad=24, gap=14, hgt=48;
+  const widths = r.words.map(w => ctx.measureText(w).width + pad*2);
+  const total = widths.reduce((a,b)=>a+b,0) + gap*(r.words.length-1);
+  let x = (W-total)/2;
+  ctx.textBaseline='middle';
+  r.words.forEach((w,i)=>{
+    roundRect(ctx, x, 1016, widths[i], hgt, hgt/2);
+    ctx.fillStyle='rgba(255,255,255,.62)';
+    ctx.fill();
+    ctx.fillStyle=r.c;
+    ctx.fillText(w, x+widths[i]/2, 1016+hgt/2+1);
+    x += widths[i]+gap;
+  });
+  ctx.textBaseline='alphabetic';
+
+  ctx.fillStyle='rgba(70,58,46,.55)';
+  ctx.font='400 21px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillText('测测你是哪一种香', W/2, 1150);
+  ctx.fillStyle='rgba(70,58,46,.38)';
+  ctx.font='400 18px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillText('ssy007shb-maker.github.io/xiangshinizhi', W/2, 1192);
+
+  // 右上角二维码（圆角裁剪）
+  ctx.save();
+  roundRect(ctx, W-40-150, 34, 150, 150, 12);
+  ctx.clip();
+  ctx.drawImage(qr, W-40-150, 34, 150, 150);
+  ctx.restore();
+  ctx.fillStyle='rgba(70,58,46,.5)';
+  ctx.font='400 15px -apple-system,"PingFang SC",sans-serif';
+  ctx.textAlign='center';
+  ctx.fillText('扫码测一测', W-40-75, 206);
+
+  const url = cv.toDataURL('image/png');
+  const ov = document.createElement('div');
+  ov.className='share-overlay';
+  ov.innerHTML = `<img src="${url}" alt="香调人格分享图"><p>长按图片保存到相册</p><button class="close">关闭</button>`;
+  ov.addEventListener('click', e => { if(e.target.tagName !== 'IMG') ov.remove(); });
+  document.body.appendChild(ov);
+  };
+
+  qr.src = QR_SRC;
+}
+
+renderCover();
+
+/* 调试入口：index.html#persona=citrus 可直接查看该人格的结果页与音乐 */
+window.addEventListener("load", function(){
+  const m = location.hash.match(/persona=([a-z]+)/);
+  if(m && RESULTS[m[1]]){
+    KEYS.forEach(k => scores[k] = 0);
+    scores[m[1]] = 12;
+    scores[KEYS[(KEYS.indexOf(m[1]) + 5) % 8]] = 5;
+    renderResult();
+  }
+});
+</script>
+</body>
+</html>
